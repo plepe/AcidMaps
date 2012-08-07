@@ -11,6 +11,11 @@
 
 #include "./interpolation.h"
 
+struct measure_map_data_element {
+  acid_maps::Pixel* element;
+  float distance ;
+};
+
 namespace acid_maps {
 
 /**
