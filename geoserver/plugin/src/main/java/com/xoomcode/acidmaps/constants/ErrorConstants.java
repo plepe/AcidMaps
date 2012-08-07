@@ -13,7 +13,7 @@ public class ErrorConstants {
 		map.put(3, "Simplify method is lower than 0 or greater than 3.");
 		map.put(4, "Simplify size is lower than 0 or greater than dataset size.");
 		map.put(5, "bounds is null.");
-		map.put(6, "Interpolation strategy is lower than 0 or greater than 3.");
+		map.put(6, "Interpolation strategy is lower than 0 or greater than 4.");
 		map.put(7, "Radius is lower than 0.");
 		map.put(8, "Tile size is null.");
 		map.put(9, "Intervals is null.");

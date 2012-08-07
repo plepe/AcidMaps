@@ -12,4 +12,5 @@ public class InterpolationStrategy {
 	public static final int NEAREST_NEIGHBOR = 1;            // N Neighbors found
 	public static final int LINEAR = 2;                      // Value decays with distance
 	public static final int INVERSE_DISTANCE_WEIGHTING = 3;  // Simple implementation of IDW
+	public static final int MEASURE_MAP = 4;
 }

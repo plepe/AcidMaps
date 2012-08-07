@@ -20,7 +20,7 @@ int Validator::validate(Configuration* cfg) {
 	if(cfg->simplify_method < 0 || cfg->simplify_method > 3) return 3;	
 	if(cfg->simplify_size < 0) return 4;
 	if(cfg->bounds == NULL) return 5;
-	if(cfg->interpolation_strategy < 0 || cfg->interpolation_strategy > 3) return 6;
+	if(cfg->interpolation_strategy < 0 || cfg->interpolation_strategy > 4) return 6;
 	if(cfg->radius < 0) return 7;
 	if(cfg->tile_size == NULL) return 8;
 	if(cfg->intervals == NULL) return 9;

@@ -16,7 +16,8 @@ enum InterpolationStrategy {
   DUMMY = 0,                       /// No interpolation uses the assigned value
   NEAREST_NEIGHBOR = 1,            /// N Neighbors found
   LINEAR = 2,                      /// Value decays with distance
-  INVERSE_DISTANCE_WEIGHTING = 3   /// Simple implementation of IDW
+  INVERSE_DISTANCE_WEIGHTING = 3,  /// Simple implementation of IDW
+  MEASURE_MAP = 4                  /// Map of Measurements - avg/median/percentile as value, opacity for density of measurements
 };
 
 };  // namespace acid_maps

@@ -10,7 +10,7 @@ public class Validator {
 		if(cfg.simplifyMethod < 0 || cfg.simplifyMethod > 3) return 3;	
 		if(cfg.simplifySize < 0) return 4;
 		if(cfg.bounds == null) return 5;
-		if(cfg.interpolationStrategy < 0 || cfg.interpolationStrategy > 3) return 6;
+		if(cfg.interpolationStrategy < 0 || cfg.interpolationStrategy > 4) return 6;
 		if(cfg.radius < 0) return 7;
 		if(cfg.width < 0 || cfg.height < 0) return 8;
 		if(cfg.intervals == null || cfg.intervals.length == 0) return 9;
