@@ -32,7 +32,7 @@ bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_da
  * @todo
  */
 void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
-  int radius, float interpolated_bitmap[]) {
+  int radius, float interpolated_bitmap[], float opacity_bitmap[]) {
   Pixel* pixel;
   float distance_x, distance_y, weight, accummulated_value, accummulated_weight, current_weight;
 

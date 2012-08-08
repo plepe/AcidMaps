@@ -49,18 +49,21 @@ int generate(Configuration* configuration, unsigned char** output_buffer, unsign
   
   int buffer_size = configuration->tile_size->width * configuration->tile_size->height;
   float* interpolated_bitmap = new float[buffer_size];
+  float* opacity_bitmap = new float[buffer_size];
   Interpolation* interpolation = InterpolationFactory::get(configuration->interpolation_strategy);
   interpolation->interpolate(configuration->tile_size, transformed_dataset, configuration->simplify_size, 
-    configuration->radius, interpolated_bitmap);
+    configuration->radius, interpolated_bitmap, opacity_bitmap);
   delete interpolation;
   delete[] transformed_dataset;
 
   unsigned char* rgba_buffer = new unsigned char[buffer_size * RGBA];
   Renderer* renderer = RendererFactory::get(configuration->renderer_type);
-  renderer->render(interpolated_bitmap, configuration->tile_size, configuration->intervals, 
-    configuration->intervals_size, configuration->intervals_colors, rgba_buffer);
+  renderer->render(interpolated_bitmap, opacity_bitmap, configuration->tile_size,
+  configuration->intervals, configuration->intervals_size, configuration->intervals_colors,
+  rgba_buffer);
   delete renderer;
   delete[] interpolated_bitmap;
+  delete[] opacity_bitmap;
   
   Encoder* encoder = EncoderFactory::get(configuration->format);
   encoder->encode(configuration->tile_size, rgba_buffer, output_buffer, output_size);

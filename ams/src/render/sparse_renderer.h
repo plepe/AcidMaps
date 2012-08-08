@@ -16,7 +16,7 @@ namespace acid_maps {
  * @brief Used to render sparse intervals
  */
 class SparseRenderer : public Renderer {
-  void render(float interpolated_bitmap[], Size* tile_size, float intervals[],
+  void render(float interpolated_bitmap[], float opacity_bitmap[], Size* tile_size, float intervals[],
   	int intervals_size, Color* intervals_colors, unsigned char* output_buffer);
   
   int interval(float value, float intervals[], int intervals_size);

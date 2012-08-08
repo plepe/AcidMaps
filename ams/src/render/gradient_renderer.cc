@@ -22,7 +22,8 @@ namespace acid_maps {
 /**
  * @todo Marching squares
  */ 
-void GradientRenderer::render(float interpolated_bitmap[], Size* tile_size, float intervals[],
+void GradientRenderer::render(float interpolated_bitmap[],
+  float opacity_bitmap[], Size* tile_size, float intervals[],
   int intervals_size, Color* intervals_colors, unsigned char* output_buffer) {
 
   // Size of the bitmap being interpolated

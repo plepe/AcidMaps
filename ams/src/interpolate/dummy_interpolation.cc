@@ -20,7 +20,7 @@ namespace acid_maps {
  * @todo use the parameter
  */
 void DummyInterpolation::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
-  int radius, float interpolated_bitmap[]) {
+  int radius, float interpolated_bitmap[], float opacity_bitmap[]) {
   std::memset(interpolated_bitmap, 0, tile_size->width * tile_size->height * sizeof(interpolated_bitmap[0]));
   
   Rectangle bounds;
