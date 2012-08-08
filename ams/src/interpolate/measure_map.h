@@ -13,7 +13,7 @@
 
 struct measure_map_data_element {
   acid_maps::Pixel* element;
-  float distance ;
+  float weight;
 };
 
 namespace acid_maps {

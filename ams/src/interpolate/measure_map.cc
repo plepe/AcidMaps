@@ -12,7 +12,6 @@
 #include <cstring>
 #include <cmath>
 #include <list>
-#include <stdio.h>
 using namespace std;
 
 #include "../constants/constants.h"
@@ -35,12 +34,12 @@ bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_da
 void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   int radius, float interpolated_bitmap[]) {
   Pixel* pixel;
-  float distance_x, distance_y, weight, accummulated_value, accummulated_weight;
+  float distance_x, distance_y, weight, accummulated_value, accummulated_weight, current_weight;
 
   // create an array dataset_ordered, which will hold pointers to elements of
   // the dataset and a distance which will be calculated for each tile-position
   list<measure_map_data_element> dataset_ordered;
-  list<measure_map_data_element>::iterator dataset_it;
+  list<measure_map_data_element>::iterator dataset_it, dataset_prev;
 
   // insert whole dataset into the list
   for (int i = 0; i < dataset_size; i++) {
@@ -48,7 +47,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 
     pixel = dataset + i;
     element.element=pixel;
-    element.distance=0;
+    element.weight=0;
 
     dataset_ordered.push_back(element);
   }
@@ -56,23 +55,76 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   // sort
   dataset_ordered.sort(measure_map_data_element_cmp);
 
+  // for every pixel on the tile
   for (int y = 0; y < tile_size->height; y++) {
     for (int x = 0; x < tile_size->width; x++) {
-      accummulated_value = 0;
       accummulated_weight = 0;
-      for (int i = 0; i < dataset_size; i++) {
-        pixel = dataset + i;
-        distance_x = static_cast<float>(x - pixel->x);
-        distance_y = static_cast<float>(y - pixel->y);
+
+      // calculate the weight for each dataset element
+      for (dataset_it=dataset_ordered.begin(); dataset_it!=dataset_ordered.end(); ++dataset_it) {
+        distance_x = static_cast<float>(x - dataset_it->element->x);
+        distance_y = static_cast<float>(y - dataset_it->element->y);
         if (distance_x == 0 && distance_y == 0) {
           weight = 1.0f;
         } else {
-          weight = 1.0f / (std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f));
+          //weight = 1.0f / (std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f));
+	  float distance=std::sqrt((std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f)));
+	  weight = 1.0f - distance / radius;
         }
-        accummulated_value += pixel->value  * weight;
-        accummulated_weight += weight;
+
+	dataset_it->weight=weight;
+	if (weight >= 0) {
+	  accummulated_weight+=weight;
+	}
       }
-      interpolated_bitmap[y * tile_size->width + x] = accummulated_value / accummulated_weight;
+
+      // no measure points around position? -> use 0 as value
+      if (accummulated_weight < 0.025) {
+	accummulated_value=0;
+      }
+
+      // find percentile
+      else {
+	accummulated_value=0;
+	bool is_first=true;
+	bool found=false;
+
+	for (dataset_it=dataset_ordered.begin(); dataset_it!=dataset_ordered.end(); ++dataset_it) {
+	  if (dataset_it->weight > 0) {
+
+	    // the weight of the first element will not be counted in the percentil-function
+	    if (is_first) {
+	      current_weight = (accummulated_weight - dataset_it->weight) * 0.8;
+	      is_first=false;
+	    }
+
+	    // after the first element there might be a match
+	    else {
+	      current_weight -= dataset_it->weight;
+
+	      if (current_weight <= 0) {
+		// interpolate between current and next value
+		accummulated_value =
+		  dataset_prev->element->value +
+		  (dataset_it->element->value - dataset_prev->element->value)
+		  * ((dataset_it->weight + current_weight) / dataset_it->weight);
+
+		found=true;
+		break;
+	      }
+	    }
+
+	    dataset_prev = dataset_it;
+	  }
+	}
+
+	// there was only one value
+	if (!found) {
+	  accummulated_value = dataset_prev->element->value;
+	}
+      }
+
+      interpolated_bitmap[y * tile_size->width + x] = accummulated_value;
     }
   }
 }
