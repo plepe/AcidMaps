@@ -18,7 +18,7 @@
 			<attribute name="Implementation-Version" value="${version.num}-b${build.number}" />
 		</manifest>
 
-		<jar destfile="/target/acidmaps-1.0.jar" manifest="MANIFEST.MF">
+		<jar destfile="target/acidmaps-1.0.jar" manifest="MANIFEST.MF">
 			<fileset dir="${dir.build}" includes="**/*.class" excludes="**/UnitTest*.class" />
 			<fileset dir="${dir.src}" includes="applicationContext.xml" />
 		</jar>
