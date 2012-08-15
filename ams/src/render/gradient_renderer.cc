@@ -83,6 +83,7 @@ void GradientRenderer::render(float interpolated_bitmap[],
   for (unsigned int i = 0; i < bitmap_size; i++) {
     interval_index = this->interval(interpolated_bitmap[i], gradient, GRADIENT_INTERVAL_SIZE);
     std::memcpy(output_buffer + i * RGBA, gradient_colors + interval_index, sizeof(gradient_colors));
+    output_buffer[i * RGBA + 3] = this->opacity(opacity_bitmap[i]);
   }
 
   delete interpolated_color;
@@ -121,6 +122,30 @@ int GradientRenderer::interval(float value, float intervals[], int intervals_siz
   return 0;
 }
 
+int GradientRenderer::interpolate(float value, float value_min, float value_max, int result_min, int result_max) {
+  if (value >= value_max)
+    return result_max;
+  if (value <= value_min)
+    return result_min;
+
+  return (int)(result_min + (result_max - result_min) * (value - value_min) / (value_max - value_min));
+}
+
+int GradientRenderer::opacity(float value) {
+  if (value > 3.0f)
+    return 0xff;
+
+  if (value > 1.0f)
+    return interpolate(value, 1.0f, 3.0f, 0x7f, 0xff);
+
+  if (value > 0.25f)
+    return interpolate(value, 0.25f, 1.0f, 0x3f, 0x7f);
+
+  if (value > 0.0f)
+    return interpolate(value, 0.0f, 0.25f, 0x00, 0x3f);
+
+  return 0x00;
+}
 
 };  // namespace acid_maps
 

@@ -79,7 +79,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
       }
 
       // no measure points around position? -> use 0 as value
-      if (accummulated_weight < 0.025) {
+      if (accummulated_weight <= 0.0f) {
 	accummulated_value=0;
       }
 
@@ -125,6 +125,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
       }
 
       interpolated_bitmap[y * tile_size->width + x] = accummulated_value;
+      opacity_bitmap[y * tile_size->width + x] = accummulated_weight;
     }
   }
 }

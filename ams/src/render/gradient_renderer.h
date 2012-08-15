@@ -21,6 +21,8 @@ class GradientRenderer : public Renderer {
   unsigned char* output_buffer);
   
   int interval(float value, float intervals[], int intervals_size);
+  int opacity(float value);
+  int interpolate(float value, float value_min, float value_max, int result_min, int result_max);
   
   static const int GRADIENT_INTERVAL_SIZE = 255;
 };
