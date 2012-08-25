@@ -9,6 +9,7 @@
 #include "../constants/constants.h"
 #include "../core/size.h"
 #include "../core/pixel.h"
+#include "../core/configuration.h"
 #include "./nearest_neighbor.h"
 #include <cstring>
 #include <climits>
@@ -21,10 +22,12 @@ namespace acid_maps {
  * @todo marching squares
  */
 void NearestNeighbor::interpolate(Size* tile_size, Pixel* dataset, int dataset_size, 
-  int radius, float interpolated_bitmap[], float opacity_bitmap[]) {
+  Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]) {
   
   Pixel* pixel;
   float minimum_distance, distance_x, distance_y, distance;
+  int radius=configuration->radius;
+
   for (int y = 0; y < tile_size->height; y++) {
     for (int x = 0; x < tile_size->width; x++) {
       

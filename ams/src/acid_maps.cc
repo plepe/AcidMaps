@@ -52,7 +52,7 @@ int generate(Configuration* configuration, unsigned char** output_buffer, unsign
   float* opacity_bitmap = new float[buffer_size];
   Interpolation* interpolation = InterpolationFactory::get(configuration->interpolation_strategy);
   interpolation->interpolate(configuration->tile_size, transformed_dataset, configuration->simplify_size, 
-    configuration->radius, interpolated_bitmap, opacity_bitmap);
+    configuration, interpolated_bitmap, opacity_bitmap);
   delete interpolation;
   delete[] transformed_dataset;
 

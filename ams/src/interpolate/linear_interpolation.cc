@@ -15,6 +15,7 @@
 #include "../core/size.h"
 #include "../core/pixel.h"
 #include "../core/rectangle.h"
+#include "../core/configuration.h"
 
 namespace acid_maps {
 
@@ -22,12 +23,14 @@ namespace acid_maps {
  * @todo REFACTOR THIS IN MULTIPLE FUNCTIONS
  */
 void LinearInterpolation::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
-  int radius, float interpolated_bitmap[], float opacity_bitmap[]) {
+  Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]) {
   std::memset(interpolated_bitmap, 0, tile_size->width * tile_size->height * sizeof(interpolated_bitmap[0]));
 
   Rectangle bounds;
   Pixel* pixel;
   float distance_x, distance_y, distance;
+  int radius=configuration->radius;
+
   for (int i = 0; i < dataset_size; i++) {
     pixel = dataset + i;
     bounds.resize(0, 0, tile_size->width, tile_size->height);

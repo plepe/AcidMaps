@@ -18,6 +18,7 @@ using namespace std;
 #include "../core/size.h"
 #include "../core/pixel.h"
 #include "../core/rectangle.h"
+#include "../core/configuration.h"
 
 namespace acid_maps {
 
@@ -32,9 +33,10 @@ bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_da
  * @todo
  */
 void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
-  int radius, float interpolated_bitmap[], float opacity_bitmap[]) {
+  Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]) {
   Pixel* pixel;
   float distance_x, distance_y, weight, accummulated_value, accummulated_weight, current_weight;
+  int radius=configuration->radius;
 
   // create an array dataset_ordered, which will hold pointers to elements of
   // the dataset and a distance which will be calculated for each tile-position

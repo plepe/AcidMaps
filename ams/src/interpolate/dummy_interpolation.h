@@ -20,7 +20,7 @@ class DummyInterpolation : public Interpolation {
    * @brief It allocates an empty bitmap
    */
   void interpolate(Size* tile_size, Pixel* dataset, int dataset_size, 
-    int radius, float interpolated_bitmap[], float opacity_bitmap[]);
+    Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]);
 };
 
 };  // namespace acid_maps
