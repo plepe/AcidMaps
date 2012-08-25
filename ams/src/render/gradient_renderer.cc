@@ -87,7 +87,7 @@ void GradientRenderer::render(float interpolated_bitmap[],
   for (unsigned int i = 0; i < bitmap_size; i++) {
     interval_index = this->interval(interpolated_bitmap[i], gradient, GRADIENT_INTERVAL_SIZE);
     std::memcpy(output_buffer + i * RGBA, gradient_colors + interval_index, sizeof(gradient_colors));
-    output_buffer[i * RGBA + 3] = this->opacity(weight_bitmap[i]);
+    this->render_weight(&output_buffer[i * RGBA], weight_bitmap[i], configuration);
   }
 
   delete interpolated_color;
@@ -135,20 +135,25 @@ int GradientRenderer::interpolate(float value, float value_min, float value_max,
   return (int)(result_min + (result_max - result_min) * (value - value_min) / (value_max - value_min));
 }
 
-int GradientRenderer::opacity(float value) {
-  if (value > 3.0f)
-    return 0xff;
+void GradientRenderer::render_weight(unsigned char* output_buffer, float weight, Configuration *configuration) {
+  int value;
 
-  if (value > 1.0f)
-    return interpolate(value, 1.0f, 3.0f, 0x7f, 0xff);
+  if (weight > 3.0f)
+    value=0xff;
 
-  if (value > 0.25f)
-    return interpolate(value, 0.25f, 1.0f, 0x3f, 0x7f);
+  else if (weight > 1.0f)
+    value = interpolate(weight, 1.0f, 3.0f, 0x7f, 0xff);
 
-  if (value > 0.0f)
-    return interpolate(value, 0.0f, 0.25f, 0x00, 0x3f);
+  else if (weight > 0.25f)
+    value = interpolate(weight, 0.25f, 1.0f, 0x3f, 0x7f);
 
-  return 0x00;
+  else if (weight > 0.0f)
+    value = interpolate(weight, 0.0f, 0.25f, 0x00, 0x3f);
+
+  else
+    value = 0x00;
+
+  output_buffer[3] = value;
 }
 
 };  // namespace acid_maps
