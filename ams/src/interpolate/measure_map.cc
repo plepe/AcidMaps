@@ -1,6 +1,6 @@
 /**
  * @file measure_map.cc
- * @brief Map of Measurements - avg/median/percentile as value, opacity for density of measurements
+ * @brief Map of Measurements - avg/median/percentile as value, opacity from weight of measurements
  *
  * @date 2012-08-07 (created)
   
@@ -33,7 +33,7 @@ bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_da
  * @todo
  */
 void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
-  Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]) {
+  Configuration* configuration, float interpolated_bitmap[], float weight_bitmap[]) {
   Pixel* pixel;
   float distance_x, distance_y, weight, accummulated_value, accummulated_weight, current_weight;
   int radius=configuration->radius;
@@ -127,7 +127,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
       }
 
       interpolated_bitmap[y * tile_size->width + x] = accummulated_value;
-      opacity_bitmap[y * tile_size->width + x] = accummulated_weight;
+      weight_bitmap[y * tile_size->width + x] = accummulated_weight;
     }
   }
 }

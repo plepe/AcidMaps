@@ -29,7 +29,7 @@ public:
    * @brief After the interpolated bitmap has been generated, the renderer generates
    * an image that represents that bitmap
    */
-  virtual void render(float interpolated_bitmap[], float opacity_bitmap[],
+  virtual void render(float interpolated_bitmap[], float weight_bitmap[],
     Size* tile_size, float intervals[], int intervals_size, Color*
     intervals_colors, unsigned char* output_buffer) = 0;
   

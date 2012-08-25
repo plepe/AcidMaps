@@ -2,7 +2,7 @@
 #define LIB_SOURCE_INTERPOLATE_MM_H_
 /**
  * @file measure_map.h
- * @brief Map of Measurements - avg/median/percentile as value, opacity for density of measurements
+ * @brief Map of Measurements - avg/median/percentile as value, opacity from weight of measurements
  *
  * @date 2012-08-07 (created)
   
@@ -26,7 +26,7 @@ class MeasureMap : public Interpolation {
    * @todo brief and description
    */
   void interpolate(Size* tile_size, Pixel* dataset, int dataset_size, 
-    Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]);
+    Configuration* configuration, float interpolated_bitmap[], float weight_bitmap[]);
 };
 
 };  // namespace acid_maps

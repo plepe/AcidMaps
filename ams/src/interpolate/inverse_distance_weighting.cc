@@ -23,7 +23,7 @@ namespace acid_maps {
  * @todo
  */
 void InverseDistanceWeighting::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
-  Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]) {
+  Configuration* configuration, float interpolated_bitmap[], float weight_bitmap[]) {
   Pixel* pixel;
   float distance_x, distance_y, weight, accummulated_value, accummulated_weight;
 

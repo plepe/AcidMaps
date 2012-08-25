@@ -23,7 +23,7 @@ namespace acid_maps {
  * @todo Marching squares
  */ 
 void GradientRenderer::render(float interpolated_bitmap[],
-  float opacity_bitmap[], Size* tile_size, float intervals[],
+  float weight_bitmap[], Size* tile_size, float intervals[],
   int intervals_size, Color* intervals_colors, unsigned char* output_buffer) {
 
   // Size of the bitmap being interpolated
@@ -83,7 +83,7 @@ void GradientRenderer::render(float interpolated_bitmap[],
   for (unsigned int i = 0; i < bitmap_size; i++) {
     interval_index = this->interval(interpolated_bitmap[i], gradient, GRADIENT_INTERVAL_SIZE);
     std::memcpy(output_buffer + i * RGBA, gradient_colors + interval_index, sizeof(gradient_colors));
-    output_buffer[i * RGBA + 3] = this->opacity(opacity_bitmap[i]);
+    output_buffer[i * RGBA + 3] = this->opacity(weight_bitmap[i]);
   }
 
   delete interpolated_color;

@@ -22,7 +22,7 @@ namespace acid_maps {
  * @todo marching squares
  */
 void NearestNeighbor::interpolate(Size* tile_size, Pixel* dataset, int dataset_size, 
-  Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]) {
+  Configuration* configuration, float interpolated_bitmap[], float weight_bitmap[]) {
   
   Pixel* pixel;
   float minimum_distance, distance_x, distance_y, distance;

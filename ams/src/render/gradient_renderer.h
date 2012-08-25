@@ -16,7 +16,7 @@ namespace acid_maps {
  * @brief Used to render sparse intervals
  */
 class GradientRenderer : public Renderer {
-  void render(float interpolated_bitmap[], float opacity_bitmap[], Size*
+  void render(float interpolated_bitmap[], float weight_bitmap[], Size*
   tile_size, float intervals[], int intervals_size, Color* intervals_colors,
   unsigned char* output_buffer);
   

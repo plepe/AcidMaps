@@ -21,7 +21,7 @@ class NearestNeighbor : public Interpolation {
    * @param interpolation_parameter int Represents the of points to consider in a KNN
    */
   void interpolate(Size* tile_size, Pixel* dataset, int dataset_size, 
-    Configuration* configuration, float interpolated_bitmap[], float opacity_bitmap[]);
+    Configuration* configuration, float interpolated_bitmap[], float weight_bitmap[]);
 };
 
 };  // namespace acid_maps

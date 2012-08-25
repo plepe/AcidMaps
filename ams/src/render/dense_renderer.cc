@@ -17,7 +17,7 @@ namespace acid_maps {
 /**
  * @todo Marching squares
  */ 
-void DenseRenderer::render(float interpolated_bitmap[], float opacity_bitmap[],
+void DenseRenderer::render(float interpolated_bitmap[], float weight_bitmap[],
   Size* tile_size, float intervals[], int intervals_size,
   Color* intervals_colors, unsigned char* output_buffer) {
   int interval_index;
