@@ -22,6 +22,7 @@ public class ErrorConstants {
 		map.put(12, "Renderer type is lower than 1 or greater than 3.");
 		map.put(13, "Format isn't equal to 0.");
 		map.put(14, "Malformed range.");
+		map.put(15, "Measure Quantil needs to be between 0 and 1.");
 	}
 	
 	public static String getErrorString(Integer code){

@@ -96,7 +96,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 
 	    // the weight of the first element will not be counted in the percentil-function
 	    if (is_first) {
-	      current_weight = (accummulated_weight - dataset_it->weight) * 0.8;
+	      current_weight = (accummulated_weight - dataset_it->weight) * configuration->measure_quantil;
 	      is_first=false;
 	    }
 

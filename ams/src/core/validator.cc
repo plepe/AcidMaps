@@ -31,6 +31,7 @@ int Validator::validate(Configuration* cfg) {
 	for(int i = 0; i < cfg->intervals_size - 1; i++){
 		if(cfg->intervals[i] >= cfg->intervals[i + 1]) return 14;
 	}
+	if(cfg->measure_quantil < 0 || cfg->measure_quantil > 1) return 15;
 	
 	return 0;
 }

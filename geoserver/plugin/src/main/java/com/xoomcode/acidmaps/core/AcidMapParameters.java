@@ -25,4 +25,6 @@ public class AcidMapParameters {
 	public static final String INTERPOLATION_STRATEGY = "INTERPOLATION_STRATEGY";
 	
 	public static final String RADIUS = "RADIUS";
+
+	public static final String MEASURE_QUANTIL = "MEASURE_QUANTIL";
 }

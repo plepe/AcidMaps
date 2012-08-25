@@ -274,6 +274,7 @@ public class AcidMapService {
 		int rendererType = new Integer(rawKvp.get(AcidMapParameters.RENDERER_TYPE));
 		int interpolationStrategy = new Integer(rawKvp.get(AcidMapParameters.INTERPOLATION_STRATEGY));
 		int radius = new Integer(rawKvp.get(AcidMapParameters.RADIUS));
+		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
 		
 		Configuration configuration = new Configuration();
 		configuration.simplifyMethod = simplifyMethod;
@@ -297,6 +298,7 @@ public class AcidMapService {
 		configuration.rendererType = rendererType;
 		configuration.interpolationStrategy = interpolationStrategy;
 		configuration.radius = radius;
+		configuration.measureQuantil= measureQuantil;
 		
 		return configuration;
 	}

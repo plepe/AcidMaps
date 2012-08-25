@@ -158,6 +158,7 @@ void buildConfiguration(JNIEnv* env, jobject jconfiguration, ams::Configuration*
  	configuration->renderer_type = getIntField(env, configurationClass, jconfiguration, "rendererType");
  	configuration->radius = getIntField(env, configurationClass, jconfiguration, "radius");
  	configuration->format = getIntField(env, configurationClass, jconfiguration, "format");
+	configuration->measure_quantil= getFloatField(env, configurationClass, jconfiguration, "measureQuantil");
 }
 
 JNIEXPORT jobject JNICALL Java_com_xoomcode_acidmaps_adapter_JCAdapter_interpolateC

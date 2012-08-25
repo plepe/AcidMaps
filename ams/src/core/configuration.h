@@ -62,6 +62,9 @@ struct Configuration {
   
   /// Image format
   int format;
+
+  /// Measure Map: which quantil should be used
+  float measure_quantil;
 };
 
 };  // namespace acid_maps

@@ -44,6 +44,8 @@ public class Configuration {
 	
 	public int format;
 	
+	public float measureQuantil;
+
 	public int error;
 
 	/**

@@ -20,6 +20,8 @@ public class Validator {
 		for(int i = 0; i < cfg.intervals.length - 1; i++){
 			if(cfg.intervals[i] >= cfg.intervals[i + 1]) return 14;
 		}
+		if(cfg.measureQuantil < 0 || cfg.measureQuantil > 1) return 15;
+
 		return 0;
 	}
 
