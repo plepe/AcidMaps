@@ -17,8 +17,7 @@ namespace acid_maps {
  */
 class GradientRenderer : public Renderer {
   void render(float interpolated_bitmap[], float weight_bitmap[], Size*
-  tile_size, float intervals[], int intervals_size, Color* intervals_colors,
-  unsigned char* output_buffer);
+  tile_size, Configuration *configuration, unsigned char* output_buffer);
   
   int interval(float value, float intervals[], int intervals_size);
   int opacity(float value);

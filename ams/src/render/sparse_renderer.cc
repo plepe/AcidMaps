@@ -17,8 +17,12 @@ namespace acid_maps {
 /**
  * @todo Marching squares
  */ 
-void SparseRenderer::render(float interpolated_bitmap[], float weight_bitmap[], Size* tile_size, float intervals[],
-  int intervals_size, Color* intervals_colors, unsigned char* output_buffer) {
+void SparseRenderer::render(float interpolated_bitmap[], float weight_bitmap[],
+  Size* tile_size, Configuration *configuration, unsigned char* output_buffer) {
+
+  int intervals_size=configuration->intervals_size;
+  float *intervals=configuration->intervals;
+  Color *intervals_colors=configuration->intervals_colors;
   int interval_index;
   int bitmap_size = tile_size->width * tile_size->height;
 

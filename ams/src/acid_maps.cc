@@ -59,8 +59,7 @@ int generate(Configuration* configuration, unsigned char** output_buffer, unsign
   unsigned char* rgba_buffer = new unsigned char[buffer_size * RGBA];
   Renderer* renderer = RendererFactory::get(configuration->renderer_type);
   renderer->render(interpolated_bitmap, weight_bitmap, configuration->tile_size,
-  configuration->intervals, configuration->intervals_size, configuration->intervals_colors,
-  rgba_buffer);
+  configuration, rgba_buffer);
   delete renderer;
   delete[] interpolated_bitmap;
   delete[] weight_bitmap;
