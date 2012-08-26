@@ -258,6 +258,16 @@ public class AcidMapService {
 		
 	}
 	
+	private int radiusCalculate(int radius, Configuration configuration) {
+		if(configuration.radiusMethod == 1) {
+			float zoom = (configuration.bounds.maxY - configuration.bounds.minY) / configuration.height;
+
+			return Math.round(radius / zoom);
+		}
+
+		return radius;
+	}
+
 	/**
 	 * Builds the configuration.
 	 *
@@ -274,6 +284,13 @@ public class AcidMapService {
 		int rendererType = new Integer(rawKvp.get(AcidMapParameters.RENDERER_TYPE));
 		int interpolationStrategy = new Integer(rawKvp.get(AcidMapParameters.INTERPOLATION_STRATEGY));
 		int radius = new Integer(rawKvp.get(AcidMapParameters.RADIUS));
+
+		int radiusMethod;
+		if(rawKvp.containsKey(AcidMapParameters.RADIUS_METHOD))
+			radiusMethod = new Integer(rawKvp.get(AcidMapParameters.RADIUS_METHOD));
+		else
+			radiusMethod = 0;
+
 		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
 		int weightMethod = new Integer(rawKvp.get(AcidMapParameters.WEIGHT_METHOD));
 		float[] weights = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS));
@@ -300,12 +317,14 @@ public class AcidMapService {
 		configuration.intervalsColors = intervalsColors;
 		configuration.rendererType = rendererType;
 		configuration.interpolationStrategy = interpolationStrategy;
-		configuration.radius = radius;
 		configuration.measureQuantil= measureQuantil;
 		configuration.weightMethod = weightMethod;
 		configuration.weights = weights;
 		configuration.weightsValues = weightsValues;
 		
+		configuration.radiusMethod = radiusMethod;
+		configuration.radius = radiusCalculate(radius, configuration);
+
 		return configuration;
 	}
 	

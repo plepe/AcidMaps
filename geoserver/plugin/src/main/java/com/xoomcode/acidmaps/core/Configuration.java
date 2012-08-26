@@ -34,6 +34,9 @@ public class Configuration {
 	/** Radius for every interpolation type. */
 	public int radius;
 	
+	/** How to calculate radius */
+	public int radiusMethod;
+
 	public float[] intervals;
 	
 	public Color[] intervalsColors;
