@@ -65,6 +65,12 @@ struct Configuration {
 
   /// Measure Map: which quantil should be used
   float measure_quantil;
+
+  /// Gradient Renderer can change opacity from weight -> (value 1)
+  int weight_method;
+  float *weights;
+  float *weights_values;
+  int weights_size;
 };
 
 };  // namespace acid_maps

@@ -275,6 +275,9 @@ public class AcidMapService {
 		int interpolationStrategy = new Integer(rawKvp.get(AcidMapParameters.INTERPOLATION_STRATEGY));
 		int radius = new Integer(rawKvp.get(AcidMapParameters.RADIUS));
 		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
+		int weightMethod = new Integer(rawKvp.get(AcidMapParameters.WEIGHT_METHOD));
+		float[] weights = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS));
+		float[] weightsValues = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS_VALUES));
 		
 		Configuration configuration = new Configuration();
 		configuration.simplifyMethod = simplifyMethod;
@@ -299,6 +302,9 @@ public class AcidMapService {
 		configuration.interpolationStrategy = interpolationStrategy;
 		configuration.radius = radius;
 		configuration.measureQuantil= measureQuantil;
+		configuration.weightMethod = weightMethod;
+		configuration.weights = weights;
+		configuration.weightsValues = weightsValues;
 		
 		return configuration;
 	}

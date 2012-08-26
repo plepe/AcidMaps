@@ -27,4 +27,10 @@ public class AcidMapParameters {
 	public static final String RADIUS = "RADIUS";
 
 	public static final String MEASURE_QUANTIL = "MEASURE_QUANTIL";
+
+	public static final String WEIGHT_METHOD = "WEIGHT_METHOD";
+
+	public static final String WEIGHTS = "WEIGHTS";
+
+	public static final String WEIGHTS_VALUES = "WEIGHTS_VALUES";
 }

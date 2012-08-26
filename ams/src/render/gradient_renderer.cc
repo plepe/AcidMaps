@@ -136,24 +136,31 @@ int GradientRenderer::interpolate(float value, float value_min, float value_max,
 }
 
 void GradientRenderer::render_weight(unsigned char* output_buffer, float weight, Configuration *configuration) {
-  int value;
+  float value;
+  int i;
 
-  if (weight > 3.0f)
-    value=0xff;
+  if (!configuration->weight_method)
+    return;
 
-  else if (weight > 1.0f)
-    value = interpolate(weight, 1.0f, 3.0f, 0x7f, 0xff);
+  if (!configuration->weights_size)
+    return;
 
-  else if (weight > 0.25f)
-    value = interpolate(weight, 0.25f, 1.0f, 0x3f, 0x7f);
-
-  else if (weight > 0.0f)
-    value = interpolate(weight, 0.0f, 0.25f, 0x00, 0x3f);
-
+  if (weight < configuration->weights[0])
+    value = configuration->weights_values[0];
   else
-    value = 0x00;
+    for (i = 0; i < configuration->weights_size - 1; i++) {
+      if (weight < configuration->weights[i+1]) {
+	value = interpolate (weight,
+	  configuration->weights[i], configuration->weights[i+1],
+	  configuration->weights_values[i], configuration->weights_values[i+1]
+	);
+	break;
+      }
 
-  output_buffer[3] = value;
+      value = configuration->weights_values[configuration->weights_size - 1];
+    }
+
+  output_buffer[3] = (char)value;
 }
 
 };  // namespace acid_maps

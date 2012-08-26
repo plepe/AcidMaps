@@ -159,6 +159,11 @@ void buildConfiguration(JNIEnv* env, jobject jconfiguration, ams::Configuration*
  	configuration->radius = getIntField(env, configurationClass, jconfiguration, "radius");
  	configuration->format = getIntField(env, configurationClass, jconfiguration, "format");
 	configuration->measure_quantil= getFloatField(env, configurationClass, jconfiguration, "measureQuantil");
+
+	configuration->weight_method = getIntField(env, configurationClass, jconfiguration, "weightMethod");
+	configuration->weights = getFloatArrayField(env, configurationClass, jconfiguration, "weights");
+	configuration->weights_size = getFloatArrayLength(env, configurationClass, jconfiguration, "weights");
+	configuration->weights_values = getFloatArrayField(env, configurationClass, jconfiguration, "weightsValues");
 }
 
 JNIEXPORT jobject JNICALL Java_com_xoomcode_acidmaps_adapter_JCAdapter_interpolateC

@@ -46,6 +46,12 @@ public class Configuration {
 	
 	public float measureQuantil;
 
+	public int weightMethod;
+
+	public float[] weights;
+
+	public float[] weightsValues;
+
 	public int error;
 
 	/**
