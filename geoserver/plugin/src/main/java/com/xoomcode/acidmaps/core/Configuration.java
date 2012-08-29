@@ -37,6 +37,9 @@ public class Configuration {
 	/** How to calculate radius */
 	public int radiusMethod;
 
+        /** Zoom Factor for Radius (needs RADIUS_METHOD=1) */
+	public float radiusZoomFactor;
+
 	public float[] intervals;
 	
 	public Color[] intervalsColors;

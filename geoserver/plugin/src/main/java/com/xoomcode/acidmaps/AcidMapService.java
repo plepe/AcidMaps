@@ -258,14 +258,20 @@ public class AcidMapService {
 		
 	}
 	
-	private int radiusCalculate(int radius, Configuration configuration) {
-		if(configuration.radiusMethod == 1) {
-			float zoom = (configuration.bounds.maxY - configuration.bounds.minY) / configuration.height;
+	private int radiusCalculate(Configuration configuration) {
+		double radius = configuration.radius;
 
-			return Math.round(radius / zoom);
+		if(configuration.radiusMethod == 1) {
+			// zoom = pixels per data units
+			double zoom = (configuration.bounds.maxY -
+			    configuration.bounds.minY) /
+			  configuration.height;
+
+			radius = radius /
+			  Math.pow(zoom, (1 / configuration.radiusZoomFactor));
 		}
 
-		return radius;
+		return (int)Math.round(radius);
 	}
 
 	/**
@@ -290,6 +296,12 @@ public class AcidMapService {
 			radiusMethod = new Integer(rawKvp.get(AcidMapParameters.RADIUS_METHOD));
 		else
 			radiusMethod = 0;
+
+		float radiusZoomFactor;
+		if(rawKvp.containsKey(AcidMapParameters.RADIUS_ZOOM_FACTOR))
+			radiusZoomFactor = new Float(rawKvp.get(AcidMapParameters.RADIUS_ZOOM_FACTOR));
+		else
+			radiusZoomFactor = 1.0f;
 
 		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
 		int weightMethod = new Integer(rawKvp.get(AcidMapParameters.WEIGHT_METHOD));
@@ -322,8 +334,10 @@ public class AcidMapService {
 		configuration.weights = weights;
 		configuration.weightsValues = weightsValues;
 		
+		configuration.radius = radius;
 		configuration.radiusMethod = radiusMethod;
-		configuration.radius = radiusCalculate(radius, configuration);
+		configuration.radiusZoomFactor = radiusZoomFactor;
+		configuration.radius = radiusCalculate(configuration);
 
 		return configuration;
 	}
