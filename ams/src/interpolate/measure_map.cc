@@ -31,9 +31,21 @@ float calculate_weight_from_distance(float distance_x, float distance_y, Configu
   distance=std::sqrt((std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f)));
 
   switch(configuration->distanceMethod) {
-    case 0:
+    case 0: // linear decline
       return 1.0f - distance / configuration->radius;
-      break;
+
+    case 1: // cos
+      if(distance > configuration->radius)
+	return 0.0f;
+
+      return std::cos((distance / configuration->radius) * (M_PI / 2.0f));
+
+    case 2: // cos squared
+      if(distance > configuration->radius)
+	return 0.0f;
+
+      return std::pow(std::cos((distance / configuration->radius) *
+        (M_PI / 2.0f)), 2.0f);
   }
 
           //weight = 1.0f / (std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f));
