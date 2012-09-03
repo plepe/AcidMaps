@@ -22,6 +22,24 @@ using namespace std;
 
 namespace acid_maps {
 
+float calculate_weight_from_distance(float distance_x, float distance_y, Configuration *configuration) {
+  float distance;
+
+  if (distance_x == 0 && distance_y == 0)
+    return 1.0f;
+
+  distance=std::sqrt((std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f)));
+
+  switch(configuration->distanceMethod) {
+    case 0:
+      return 1.0f - distance / configuration->radius;
+      break;
+  }
+
+          //weight = 1.0f / (std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f));
+
+}
+
 bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_data_element second) {
   if(first.element->value < second.element->value)
     return true;
@@ -66,13 +84,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
       for (dataset_it=dataset_ordered.begin(); dataset_it!=dataset_ordered.end(); ++dataset_it) {
         distance_x = static_cast<float>(x - dataset_it->element->x);
         distance_y = static_cast<float>(y - dataset_it->element->y);
-        if (distance_x == 0 && distance_y == 0) {
-          weight = 1.0f;
-        } else {
-          //weight = 1.0f / (std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f));
-	  float distance=std::sqrt((std::pow(distance_x, 2.0f) + std::pow(distance_y, 2.0f)));
-	  weight = 1.0f - distance / radius;
-        }
+	weight = calculate_weight_from_distance(distance_x, distance_y, configuration);
 
 	dataset_it->weight=weight;
 	if (weight >= 0) {

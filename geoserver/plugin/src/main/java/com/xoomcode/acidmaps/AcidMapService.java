@@ -303,6 +303,10 @@ public class AcidMapService {
 		else
 			radiusZoomFactor = 1.0f;
 
+		int distanceMethod = 0;
+		if(rawKvp.containsKey(AcidMapParameters.DISTANCE_METHOD))
+			distanceMethod = new Integer(rawKvp.get(AcidMapParameters.DISTANCE_METHOD));
+
 		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
 		int weightMethod = new Integer(rawKvp.get(AcidMapParameters.WEIGHT_METHOD));
 		float[] weights = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS));
@@ -338,6 +342,7 @@ public class AcidMapService {
 		configuration.radiusMethod = radiusMethod;
 		configuration.radiusZoomFactor = radiusZoomFactor;
 		configuration.radius = radiusCalculate(configuration);
+		configuration.distanceMethod = distanceMethod;
 
 		return configuration;
 	}

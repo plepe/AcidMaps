@@ -60,6 +60,9 @@ struct Configuration {
   /// Determines how intervals are going to be accessed in the rendering step
   int renderer_type;
   
+  /// How to calculate the weight depending on the distance of each points
+  int distanceMethod;
+
   /// Image format
   int format;
 

@@ -30,6 +30,8 @@ public class AcidMapParameters {
 
 	public static final String RADIUS_ZOOM_FACTOR = "RADIUS_ZOOM_FACTOR";
 
+	public static final String DISTANCE_METHOD = "DISTANCE_METHOD";
+
 	public static final String MEASURE_QUANTIL = "MEASURE_QUANTIL";
 
 	public static final String WEIGHT_METHOD = "WEIGHT_METHOD";

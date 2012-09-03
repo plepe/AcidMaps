@@ -40,6 +40,9 @@ public class Configuration {
         /** Zoom Factor for Radius (needs RADIUS_METHOD=1) */
 	public float radiusZoomFactor;
 
+	/** How to calculate the weight depending on the distance of each points */
+	public int distanceMethod;
+
 	public float[] intervals;
 	
 	public Color[] intervalsColors;
