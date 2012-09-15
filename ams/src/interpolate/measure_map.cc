@@ -60,7 +60,7 @@ float get_quantil(Configuration *configuration, list<measure_map_data_element> d
   bool found=false;
 
   for (dataset_it=dataset_ordered.begin(); dataset_it!=dataset_ordered.end(); ++dataset_it) {
-    if (dataset_it->weight > 0) {
+    if (dataset_it->within) {
 
       // the weight of the first element will not be counted in the percentil-function
       if (is_first) {
@@ -112,6 +112,8 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   Pixel* pixel;
   float distance_x, distance_y, weight, accummulated_value, accummulated_weight, current_weight;
   int radius=configuration->radius;
+  time_t t=time(NULL);
+  int bbox[4];
 
   // create an array dataset_ordered, which will hold pointers to elements of
   // the dataset and a distance which will be calculated for each tile-position
@@ -137,8 +139,24 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
     for (int x = 0; x < tile_size->width; x++) {
       accummulated_weight = 0;
 
+      // bbox to speed up exclusion of elements
+      bbox[0] = x - radius;
+      bbox[1] = x + radius;
+      bbox[2] = y - radius;
+      bbox[3] = y + radius;
+
       // calculate the weight for each dataset element
       for (dataset_it=dataset_ordered.begin(); dataset_it!=dataset_ordered.end(); ++dataset_it) {
+	// outside? it's outside, we can continue with next element
+	if ((dataset_it->element->x < bbox[0])||
+	    (dataset_it->element->x > bbox[1])||
+	    (dataset_it->element->y < bbox[2])||
+	    (dataset_it->element->y > bbox[3])) {
+
+	  dataset_it->within = false;
+	  continue;
+	}
+
         distance_x = static_cast<float>(x - dataset_it->element->x);
         distance_y = static_cast<float>(y - dataset_it->element->y);
 	weight = calculate_weight_from_distance(distance_x, distance_y, configuration);
@@ -146,6 +164,10 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 	dataset_it->weight=weight;
 	if (weight >= 0) {
 	  accummulated_weight+=weight;
+	  dataset_it->within = true;
+	}
+	else {
+	  dataset_it->within = false;
 	}
       }
 

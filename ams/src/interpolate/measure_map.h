@@ -14,6 +14,7 @@
 struct measure_map_data_element {
   acid_maps::Pixel* element;
   float weight;
+  bool within;
 };
 
 namespace acid_maps {
