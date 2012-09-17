@@ -113,17 +113,9 @@ public class AcidMapService {
 				
 				MapLayerInfo layer = request.getLayers().get(0);
 				
-				DatasetCacheKey datasetCacheKey = new DatasetCacheKey(layer.getName(), getStringFilter(request));
-				/*
-				 * In order to avoid to get all the points for each tile a synchronized method is 
-				 * invoked. Once that the first execution of synchronizedRun has been executed
-				 * the data is cached, and the next time this method is invoked, it uses the cached data.
-				 */
-				if(datasetCache.isCached(datasetCacheKey)){
-					return run(request, mapContext);
-				} else {
-					return synchronizedRun(request, mapContext);
-				}
+				Configuration configuration = buildConfiguration(request);
+
+				return synchronizedRun(request, mapContext, configuration);
 			}
 			return null;
 		} catch (ServiceException e) {
@@ -160,18 +152,12 @@ public class AcidMapService {
 	 * @throws AcidMapException the acid map exception
 	 */
 	
-	public synchronized WebMap synchronizedRun(final GetMapRequest request, WMSMapContext mapContext) throws ServiceException, IOException, AcidMapException {
+	public WebMap synchronizedRun(final GetMapRequest request, WMSMapContext mapContext, Configuration configuration) throws ServiceException, IOException, AcidMapException {
 		Map<String, String> rawKvp = request.getRawKvp();
 		String valueColumn = rawKvp.get(AcidMapParameters.VALUE_COLUMN);
 
 		MapLayerInfo layer = request.getLayers().get(0);
 		
-		DatasetCacheKey datasetCacheKey = new DatasetCacheKey(layer.getName(), getStringFilter(request));
-		
-		// hack: we will build configuration later-on in run() again,
-		// but we need it to add a bbox filter in buildLayersFilters()
-		Configuration configuration = buildConfiguration(request);
-
 		Filter layerFilter = buildLayersFilters(request.getFilter(), request.getLayers(), configuration)[0];
 		
 		FeatureSource<? extends FeatureType, ? extends Feature> source = layer.getFeatureSource(true);
@@ -179,35 +165,32 @@ public class AcidMapService {
 		final GeometryDescriptor geometryAttribute = schema.getGeometryDescriptor();
 		
 		com.xoomcode.acidmaps.core.Point[] dataset = null;
-		if(!datasetCache.isCached(datasetCacheKey)){
-			LOGGER.log(Level.WARNING, "Cache missed");
+
+		//Get the features
+		FeatureCollection<? extends FeatureType, ? extends Feature> features = source.getFeatures(layerFilter);
+		FeatureIterator<? extends Feature> featureIterator = features.features();
+		dataset = new com.xoomcode.acidmaps.core.Point[features.size()];
+		int i = 0;
+		while (featureIterator.hasNext()) {
+			SimpleFeature f = (SimpleFeature) featureIterator.next();
+			Property theGeom = f.getProperty(geometryAttribute.getName());
+			Point point = (Point)theGeom.getValue();
+			com.xoomcode.acidmaps.core.Point acidMapPoint = new com.xoomcode.acidmaps.core.Point();
+			acidMapPoint.x = (float)point.getX();
+			acidMapPoint.y = (float)point.getY();
 			
-			//Get the features
-			FeatureCollection<? extends FeatureType, ? extends Feature> features = source.getFeatures(layerFilter);
-			FeatureIterator<? extends Feature> featureIterator = features.features();
-			dataset = new com.xoomcode.acidmaps.core.Point[features.size()];
-			int i = 0;
-			while (featureIterator.hasNext()) {
-				SimpleFeature f = (SimpleFeature) featureIterator.next();
-				Property theGeom = f.getProperty(geometryAttribute.getName());
-				Point point = (Point)theGeom.getValue();
-				com.xoomcode.acidmaps.core.Point acidMapPoint = new com.xoomcode.acidmaps.core.Point();
-				acidMapPoint.x = (float)point.getX();
-				acidMapPoint.y = (float)point.getY();
-				
-				Property value = f.getProperty(valueColumn);
-				if(value != null){
-					acidMapPoint.value = ((Number)value.getValue()).floatValue();
-				}
-				dataset [i] = acidMapPoint;
-				i++;
-			} 
-			datasetCache.put(datasetCacheKey, dataset);
-		} else {
-			LOGGER.log(Level.WARNING, "Cache hint");
-			
+			Property value = f.getProperty(valueColumn);
+			if(value != null){
+				acidMapPoint.value = ((Number)value.getValue()).floatValue();
+			}
+			dataset [i] = acidMapPoint;
+			i++;
 		}
-		return run(request, mapContext);
+
+		configuration.dataset = dataset;
+		configuration.datasetSize = configuration.dataset.length;
+
+		return run(request, mapContext, configuration);
 	}
 
 	
@@ -235,17 +218,10 @@ public class AcidMapService {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AcidMapException the acid map exception
 	 */
-	public WebMap run(final GetMapRequest request, WMSMapContext mapContext)
+	public WebMap run(final GetMapRequest request, WMSMapContext mapContext, Configuration configuration)
 			throws ServiceException, IOException, AcidMapException {
 
-		Configuration configuration = buildConfiguration(request);
-		
 		MapLayerInfo layer = request.getLayers().get(0);
-		
-		DatasetCacheKey datasetCacheKey = new DatasetCacheKey(layer.getName(), getStringFilter(request));
-		
-		configuration.dataset = datasetCache.getDataset(datasetCacheKey);
-		configuration.datasetSize = configuration.dataset.length;
 		
 		int error = Validator.validate(configuration);
 		if(error != 0){
