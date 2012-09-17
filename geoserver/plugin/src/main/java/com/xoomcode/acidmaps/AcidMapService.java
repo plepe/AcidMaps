@@ -190,6 +190,8 @@ public class AcidMapService {
 		configuration.dataset = dataset;
 		configuration.datasetSize = configuration.dataset.length;
 
+		featureIterator.close();
+
 		return run(request, mapContext, configuration);
 	}
 
