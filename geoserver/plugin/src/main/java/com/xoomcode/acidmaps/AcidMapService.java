@@ -32,6 +32,7 @@ import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.styling.FeatureTypeConstraint;
 import org.geotools.util.logging.Logging;
+import org.geotools.filter.text.cql2.CQL;
 import org.opengis.feature.Feature;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
@@ -167,7 +168,11 @@ public class AcidMapService {
 		
 		DatasetCacheKey datasetCacheKey = new DatasetCacheKey(layer.getName(), getStringFilter(request));
 		
-		Filter layerFilter = buildLayersFilters(request.getFilter(), request.getLayers())[0];
+		// hack: we will build configuration later-on in run() again,
+		// but we need it to add a bbox filter in buildLayersFilters()
+		Configuration configuration = buildConfiguration(request);
+
+		Filter layerFilter = buildLayersFilters(request.getFilter(), request.getLayers(), configuration)[0];
 		
 		FeatureSource<? extends FeatureType, ? extends Feature> source = layer.getFeatureSource(true);
 		FeatureType schema = source.getSchema();
@@ -421,7 +426,7 @@ public class AcidMapService {
      * @return a list of filters, one per layer, resulting of anding the user requested filter and
      *         the layer definition filter
      */
-    private Filter[] buildLayersFilters(List<Filter> requestFilters, List<MapLayerInfo> layers) {
+    private Filter[] buildLayersFilters(List<Filter> requestFilters, List<MapLayerInfo> layers, Configuration configuration) {
         final int nLayers = layers.size();
         if (requestFilters == null || requestFilters.size() == 0) {
             requestFilters = Collections.nCopies(layers.size(), (Filter) Filter.INCLUDE);
@@ -461,6 +466,37 @@ public class AcidMapService {
                 combinedList[i] = combined;
             }
         }
+
+	// Add a BBOX query to each filter
+	try {
+		// create a bounding box, extended by radius
+		Bounds bbox = new Bounds();
+		float radius_add = configuration.radius * configuration.zoom;
+
+		bbox.minX = configuration.bounds.minX - radius_add;
+		bbox.maxX = configuration.bounds.maxX + radius_add;
+		bbox.minY = configuration.bounds.minY - radius_add;
+		bbox.maxY = configuration.bounds.maxY + radius_add;
+
+		// build the bboxFilter
+		// TODO: request name of geometry column, currently using
+		// location per default
+		Filter bboxFilter = CQL.toFilter("BBOX(location, " +
+			bbox.minX + ", " + bbox.minY + ", " +
+			bbox.maxX + ", " + bbox.maxY + ")");
+
+		// and to each layer's filter
+		for (int i = 0; i < nLayers; i++) {
+                        combinedList[i] =
+				filterFactory.and(combinedList[i], bboxFilter);
+		}
+	}
+	catch (Exception e) {
+		LOGGER.log(Level.SEVERE,
+			"Can't create BBOX and add it to filter list: " +
+			e.getMessage(), e);
+	}
+
         return combinedList;
     }
     
