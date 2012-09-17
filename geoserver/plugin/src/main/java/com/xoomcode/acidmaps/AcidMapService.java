@@ -115,7 +115,7 @@ public class AcidMapService {
 				
 				Configuration configuration = buildConfiguration(request);
 
-				return synchronizedRun(request, mapContext, configuration);
+				return run(request, mapContext, configuration);
 			}
 			return null;
 		} catch (ServiceException e) {
@@ -138,21 +138,18 @@ public class AcidMapService {
 	}
 
 	/**
-	 * When the data to be interpolated are not cached, this method is invoked.
-	 * Because of this method is synchronized, all invocations of this will be glued.
-	 * The first invocation of this method caches the data. Next glued invocations
-	 * will use the cached data.
-	 * Return the map.
+	 * Get the data from layer, build the image and return that.
 	 *
 	 * @param request the request
 	 * @param mapContext the map context
+	 * @param configuration The configuration of the request
 	 * @return the web map
 	 * @throws ServiceException the service exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws AcidMapException the acid map exception
 	 */
 	
-	public WebMap synchronizedRun(final GetMapRequest request, WMSMapContext mapContext, Configuration configuration) throws ServiceException, IOException, AcidMapException {
+	public WebMap run(final GetMapRequest request, WMSMapContext mapContext, Configuration configuration) throws ServiceException, IOException, AcidMapException {
 		Map<String, String> rawKvp = request.getRawKvp();
 		String valueColumn = rawKvp.get(AcidMapParameters.VALUE_COLUMN);
 
@@ -192,10 +189,21 @@ public class AcidMapService {
 
 		featureIterator.close();
 
-		return run(request, mapContext, configuration);
+		int error = Validator.validate(configuration);
+		if(error != 0){
+			throw new AcidMapException("Opaaa. Error in acidMapsLibrary. " + ErrorConstants.getErrorString(error));
+		}
+
+		JCAdapter jCAdapter = new JCAdapter();
+		byte[] outputBuffer = jCAdapter.interpolate(configuration);
+
+		BufferedImage image=ImageIO.read(new ByteArrayInputStream(outputBuffer));
+
+		final String outputFormat = request.getFormat();
+		RenderedImageMap result = new RenderedImageMap(mapContext, image, outputFormat);
+		return result;
 	}
 
-	
 	/**
 	 * Build the string filter.
 	 *
@@ -210,37 +218,7 @@ public class AcidMapService {
 		return filter;
 	}
 
-	/**
-	 * Get the data from cache, build the image and return that.
-	 *
-	 * @param request the request
-	 * @param mapContext the map context
-	 * @return the web map
-	 * @throws ServiceException the service exception
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws AcidMapException the acid map exception
-	 */
-	public WebMap run(final GetMapRequest request, WMSMapContext mapContext, Configuration configuration)
-			throws ServiceException, IOException, AcidMapException {
 
-		MapLayerInfo layer = request.getLayers().get(0);
-		
-		int error = Validator.validate(configuration);
-		if(error != 0){
-			throw new AcidMapException("Opaaa. Error in acidMapsLibrary. " + ErrorConstants.getErrorString(error));
-		}
-		
-		JCAdapter jCAdapter = new JCAdapter();
-		byte[] outputBuffer = jCAdapter.interpolate(configuration);
-		
-		BufferedImage image=ImageIO.read(new ByteArrayInputStream(outputBuffer));
-		
-        final String outputFormat = request.getFormat();
-        RenderedImageMap result = new RenderedImageMap(mapContext, image, outputFormat);
-        return result;
-		
-	}
-	
 	private int radiusCalculate(Configuration configuration) {
 		double radius = configuration.radius;
 
