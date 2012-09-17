@@ -165,6 +165,8 @@ void buildConfiguration(JNIEnv* env, jobject jconfiguration, ams::Configuration*
 	configuration->weights = getFloatArrayField(env, configurationClass, jconfiguration, "weights");
 	configuration->weights_size = getFloatArrayLength(env, configurationClass, jconfiguration, "weights");
 	configuration->weights_values = getFloatArrayField(env, configurationClass, jconfiguration, "weightsValues");
+
+	configuration->zoom= getFloatField(env, configurationClass, jconfiguration, "zoom");
 }
 
 JNIEXPORT jobject JNICALL Java_com_xoomcode_acidmaps_adapter_JCAdapter_interpolateC

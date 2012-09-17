@@ -344,6 +344,9 @@ public class AcidMapService {
 		configuration.radius = radiusCalculate(configuration);
 		configuration.distanceMethod = distanceMethod;
 
+		configuration.zoom = (configuration.bounds.maxY -
+			configuration.bounds.minY) / configuration.height;
+
 		return configuration;
 	}
 	

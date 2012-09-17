@@ -74,6 +74,9 @@ struct Configuration {
   float *weights;
   float *weights_values;
   int weights_size;
+
+  /// The zoom factor (pixels per data units)
+  float zoom;
 };
 
 };  // namespace acid_maps

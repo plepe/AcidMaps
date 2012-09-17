@@ -61,6 +61,9 @@ public class Configuration {
 
 	public float[] weightsValues;
 
+	/// The zoom factor (pixels per data units)
+	public float zoom;
+
 	public int error;
 
 	/**
