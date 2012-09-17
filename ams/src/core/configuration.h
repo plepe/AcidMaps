@@ -68,6 +68,8 @@ struct Configuration {
 
   /// Measure Map: which quantil should be used
   float measure_quantil;
+  float quantil_offset;
+  int quantil_method;
 
   /// Gradient Renderer can change opacity from weight -> (value 1)
   int weight_method;

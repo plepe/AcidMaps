@@ -41,6 +41,11 @@ h2. AMS parameters
 * RADIUS_ZOOM_FACTOR: When RADIUS_METHOD=1 is used, works as an additional factor for radius dependent on current zoom level. Default: 1. A factor >1 increases the radius for lower zoom levels (zooming out).
 * DISTANCE_METHOD: Defines how to calculate the weight of each point depending on the distance. Possible values: 0: linear decline to 0, 1: cos, 2: cos squared . Default: 0.
 
+h2. AMS parameters for "Quantil Map"
+* MEASURE_QUANTIL: Which quantil should be calculated (0.0 - 1.0).
+* QUANTIL_METHOD: Determines how the Quantil will be calculated. Values: 0 (the exact quantil will be used), 1 (the average of the quantil +/- QUANTIL_OFFSET will be calculated), 2 (the average of the twice the quantil at MEASURE_QUANTIL and +/- QUANTIL_OFFSET will be calculated). Default: 0
+* QUANTIL_OFFSET: Modifier for MEASURE_QUANTIL, see QUANTIL_METHOD. Default: 0.1. If MEASURE_QUANTIL +/- QUANTIL_OFFSET is <0 or >1, the Quantil at 0 resp. 1 will be used.
+
 h2. Example of AMS request with OpenLayers:
 <pre><code>
 wms = new OpenLayers.Layer.WMS(

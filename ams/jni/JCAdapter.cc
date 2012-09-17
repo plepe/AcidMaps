@@ -160,6 +160,8 @@ void buildConfiguration(JNIEnv* env, jobject jconfiguration, ams::Configuration*
 	configuration->distanceMethod = getIntField(env, configurationClass, jconfiguration, "distanceMethod");
  	configuration->format = getIntField(env, configurationClass, jconfiguration, "format");
 	configuration->measure_quantil= getFloatField(env, configurationClass, jconfiguration, "measureQuantil");
+	configuration->quantil_method= getIntField(env, configurationClass, jconfiguration, "quantilMethod");
+	configuration->quantil_offset= getFloatField(env, configurationClass, jconfiguration, "quantilOffset");
 
 	configuration->weight_method = getIntField(env, configurationClass, jconfiguration, "weightMethod");
 	configuration->weights = getFloatArrayField(env, configurationClass, jconfiguration, "weights");

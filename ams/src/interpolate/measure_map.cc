@@ -52,19 +52,24 @@ float calculate_weight_from_distance(float distance_x, float distance_y, Configu
 
 }
 
-float get_quantil(Configuration *configuration, list<measure_map_data_element> dataset_ordered, float accummulated_weight, float quantil) {
+float get_quantil_at(Configuration *configuration, list<measure_map_data_element> dataset_ordered, float accummulated_weight, float quantil) {
   list<measure_map_data_element>::iterator dataset_it, dataset_prev;
   float accummulated_value=0;
   float current_weight;
   bool is_first=true;
   bool found=false;
 
+  if (quantil < 0.0f)
+    quantil = 0.0f;
+  if (quantil > 1.0f)
+    quantil = 1.0f;
+
   for (dataset_it=dataset_ordered.begin(); dataset_it!=dataset_ordered.end(); ++dataset_it) {
     if (dataset_it->within) {
 
       // the weight of the first element will not be counted in the percentil-function
       if (is_first) {
-	current_weight = (accummulated_weight - dataset_it->weight) * configuration->measure_quantil;
+	current_weight = (accummulated_weight - dataset_it->weight) * quantil;
 	is_first=false;
       }
 
@@ -96,6 +101,38 @@ float get_quantil(Configuration *configuration, list<measure_map_data_element> d
   return accummulated_value;
 }
 
+
+float get_quantil(Configuration *configuration, list<measure_map_data_element> dataset_ordered, float accummulated_weight) {
+  switch (configuration->quantil_method) {
+    case 1:
+      return (
+	get_quantil_at(configuration, dataset_ordered, accummulated_weight,
+		configuration->measure_quantil - configuration->quantil_offset) +
+	get_quantil_at(configuration, dataset_ordered, accummulated_weight,
+		configuration->measure_quantil + configuration->quantil_offset)
+      )
+      / 2.0f;
+
+    case 2:
+      return (
+	get_quantil_at(configuration, dataset_ordered, accummulated_weight,
+		configuration->measure_quantil - configuration->quantil_offset) +
+	get_quantil_at(configuration, dataset_ordered, accummulated_weight,
+		configuration->measure_quantil) * 2.0f +
+	get_quantil_at(configuration, dataset_ordered, accummulated_weight,
+		configuration->measure_quantil + configuration->quantil_offset)
+      )
+      / 4.0f;
+
+    case 0:
+    default:
+      return get_quantil_at(configuration, dataset_ordered, accummulated_weight,
+		configuration->measure_quantil);
+
+  }
+
+  return 0;
+}
 
 bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_data_element second) {
   if(first.element->value < second.element->value)
@@ -178,7 +215,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 
       // find percentile
       else {
-	accummulated_value = get_quantil(configuration, dataset_ordered, accummulated_weight, configuration->measure_quantil);
+	accummulated_value = get_quantil(configuration, dataset_ordered, accummulated_weight);
       }
 
       interpolated_bitmap[y * tile_size->width + x] = accummulated_value;

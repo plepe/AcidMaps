@@ -34,6 +34,10 @@ public class AcidMapParameters {
 
 	public static final String MEASURE_QUANTIL = "MEASURE_QUANTIL";
 
+	public static final String QUANTIL_METHOD = "QUANTIL_METHOD";
+
+	public static final String QUANTIL_OFFSET = "QUANTIL_OFFSET";
+
 	public static final String WEIGHT_METHOD = "WEIGHT_METHOD";
 
 	public static final String WEIGHTS = "WEIGHTS";

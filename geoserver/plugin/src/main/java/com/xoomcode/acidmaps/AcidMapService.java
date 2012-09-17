@@ -269,6 +269,14 @@ public class AcidMapService {
 			distanceMethod = new Integer(rawKvp.get(AcidMapParameters.DISTANCE_METHOD));
 
 		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
+		float quantilOffset = 0.1f;
+		if(rawKvp.containsKey(AcidMapParameters.QUANTIL_OFFSET))
+			quantilOffset = new Float(rawKvp.get(AcidMapParameters.QUANTIL_OFFSET));
+
+		int quantilMethod = 0;
+		if(rawKvp.containsKey(AcidMapParameters.QUANTIL_METHOD))
+			quantilMethod = new Integer(rawKvp.get(AcidMapParameters.QUANTIL_METHOD));
+
 		int weightMethod = new Integer(rawKvp.get(AcidMapParameters.WEIGHT_METHOD));
 		float[] weights = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS));
 		float[] weightsValues = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS_VALUES));
@@ -295,6 +303,8 @@ public class AcidMapService {
 		configuration.rendererType = rendererType;
 		configuration.interpolationStrategy = interpolationStrategy;
 		configuration.measureQuantil= measureQuantil;
+		configuration.quantilMethod = quantilMethod;
+		configuration.quantilOffset = quantilOffset;
 		configuration.weightMethod = weightMethod;
 		configuration.weights = weights;
 		configuration.weightsValues = weightsValues;
