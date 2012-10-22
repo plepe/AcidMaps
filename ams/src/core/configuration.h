@@ -79,6 +79,9 @@ struct Configuration {
 
   /// The zoom factor (pixels per data units)
   float zoom;
+
+  /// Raster
+  int raster;
 };
 
 };  // namespace acid_maps

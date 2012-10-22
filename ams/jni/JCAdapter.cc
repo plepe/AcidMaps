@@ -168,6 +168,8 @@ void buildConfiguration(JNIEnv* env, jobject jconfiguration, ams::Configuration*
 	configuration->weights_size = getFloatArrayLength(env, configurationClass, jconfiguration, "weights");
 	configuration->weights_values = getFloatArrayField(env, configurationClass, jconfiguration, "weightsValues");
 
+	configuration->raster = getIntField(env, configurationClass, jconfiguration, "raster");
+
 	configuration->zoom= getFloatField(env, configurationClass, jconfiguration, "zoom");
 }
 

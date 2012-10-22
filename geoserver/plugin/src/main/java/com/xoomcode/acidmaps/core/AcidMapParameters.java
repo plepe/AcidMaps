@@ -43,4 +43,6 @@ public class AcidMapParameters {
 	public static final String WEIGHTS = "WEIGHTS";
 
 	public static final String WEIGHTS_VALUES = "WEIGHTS_VALUES";
+
+	public static final String RASTER = "RASTER";
 }

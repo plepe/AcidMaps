@@ -280,7 +280,13 @@ public class AcidMapService {
 		int weightMethod = new Integer(rawKvp.get(AcidMapParameters.WEIGHT_METHOD));
 		float[] weights = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS));
 		float[] weightsValues = buildIntervals(rawKvp.get(AcidMapParameters.WEIGHTS_VALUES));
-		
+
+		int raster = 1;
+		if(rawKvp.containsKey(AcidMapParameters.RASTER))
+			raster = new Integer(rawKvp.get(AcidMapParameters.RASTER));
+		if(raster < 1)
+		  raster = 1;
+
 		Configuration configuration = new Configuration();
 		configuration.simplifyMethod = simplifyMethod;
 		configuration.simplifySize = simplifySize;
@@ -314,6 +320,8 @@ public class AcidMapService {
 		configuration.radiusZoomFactor = radiusZoomFactor;
 		configuration.radius = radiusCalculate(configuration);
 		configuration.distanceMethod = distanceMethod;
+
+		configuration.raster = raster;
 
 		configuration.zoom = (configuration.bounds.maxY -
 			configuration.bounds.minY) / configuration.height;

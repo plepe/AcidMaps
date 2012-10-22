@@ -65,6 +65,8 @@ public class Configuration {
 
 	public float[] weightsValues;
 
+	public int raster;
+
 	/// The zoom factor (pixels per data units)
 	public float zoom;
 

@@ -151,6 +151,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   int radius=configuration->radius;
   time_t t=time(NULL);
   int bbox[4];
+  int raster=configuration->raster;
 
   // create an array dataset_ordered, which will hold pointers to elements of
   // the dataset and a distance which will be calculated for each tile-position
@@ -172,8 +173,8 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   dataset_ordered.sort(measure_map_data_element_cmp);
 
   // for every pixel on the tile
-  for (int y = 0; y < tile_size->height; y++) {
-    for (int x = 0; x < tile_size->width; x++) {
+  for (int y = 0; y < tile_size->height; y+=raster) {
+    for (int x = 0; x < tile_size->width; x+=raster) {
       accummulated_weight = 0;
 
       // bbox to speed up exclusion of elements
@@ -218,8 +219,11 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 	accummulated_value = get_quantil(configuration, dataset_ordered, accummulated_weight);
       }
 
-      interpolated_bitmap[y * tile_size->width + x] = accummulated_value;
-      weight_bitmap[y * tile_size->width + x] = accummulated_weight;
+      for(int y1 = y; y1 <= y + raster - 1; y1++)
+	for(int x1 = x; x1 <= x + raster - 1; x1++) {
+	  interpolated_bitmap[y1 * tile_size->width + x1] = accummulated_value;
+	  weight_bitmap[y1 * tile_size->width + x1] = accummulated_weight;
+	}
     }
   }
 }
