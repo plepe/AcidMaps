@@ -42,6 +42,11 @@ h2. AMS parameters
 * DISTANCE_METHOD: Defines how to calculate the weight of each point depending on the distance. Possible values: 0: linear decline to 0, 1: cos, 2: cos squared . Default: 0.
 * RASTER: To improve speed you can reduce the number of calculated pixels, by setting a RASTER>1. Default: 1. Currently the value of the top-left pixel is distributed to the other pixels.
 
+h3. AMS parameters for Gradient renderer (RENDERER_TYPE=2)
+* OPACITY_METHOD: Which method should be used for opacity value. Valid values are: 0 ( Use 'A' channel of Interval Colors ), 1 ( Opacity from weight, see WEIGHTS and WEIGHTS_VALUES. Weight values will only be saved from INTERPOLATION_STRATEGY=4. ). Default: 0.
+* WEIGHTS: Interval list for OPACITY_METHOD=1, e.g. "0,1,5".
+* WEIGHTS_VALUES: Opacity for given weights, e.g. "0,64,255". Values inbetween will be interpolated. 0=transparent, 255=fully opaque.
+
 h3. AMS parameters for "Quantil Map" (INTERPOLATION_STRATEGY=4)
 * QUANTIL: Which quantil should be calculated (0.0 - 1.0).
 * QUANTIL_METHOD: Determines how the Quantil will be calculated. Values: 0 (the exact quantil will be used), 1 (the average of the quantil +/- QUANTIL_OFFSET will be calculated), 2 (the average of the twice the quantil at QUANTIL and +/- QUANTIL_OFFSET will be calculated). Default: 0

@@ -20,7 +20,7 @@ class GradientRenderer : public Renderer {
   tile_size, Configuration *configuration, unsigned char* output_buffer);
   
   int interval(float value, float intervals[], int intervals_size);
-  void render_weight(unsigned char* output_buffer , float weight, Configuration *configuration);
+  void render_opacity(unsigned char* output_buffer , float weight, Configuration *configuration);
   int interpolate(float value, float value_min, float value_max, int result_min, int result_max);
   
   static const int GRADIENT_INTERVAL_SIZE = 255;

@@ -71,8 +71,8 @@ struct Configuration {
   float quantil_offset;
   int quantil_method;
 
-  /// Gradient Renderer can change opacity from weight -> (value 1)
-  int weight_method;
+  /// Gradient Renderer can calculate opacity from weight -> (value 1)
+  int opacity_method;
   float *weights;
   float *weights_values;
   int weights_size;

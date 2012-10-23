@@ -38,7 +38,7 @@ public class AcidMapParameters {
 
 	public static final String QUANTIL_OFFSET = "QUANTIL_OFFSET";
 
-	public static final String WEIGHT_METHOD = "WEIGHT_METHOD";
+	public static final String OPACITY_METHOD = "OPACITY_METHOD";
 
 	public static final String WEIGHTS = "WEIGHTS";
 

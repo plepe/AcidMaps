@@ -87,7 +87,7 @@ void GradientRenderer::render(float interpolated_bitmap[],
   for (unsigned int i = 0; i < bitmap_size; i++) {
     interval_index = this->interval(interpolated_bitmap[i], gradient, GRADIENT_INTERVAL_SIZE);
     std::memcpy(output_buffer + i * RGBA, gradient_colors + interval_index, sizeof(gradient_colors));
-    this->render_weight(&output_buffer[i * RGBA], weight_bitmap[i], configuration);
+    this->render_opacity(&output_buffer[i * RGBA], weight_bitmap[i], configuration);
   }
 
   delete interpolated_color;
@@ -135,11 +135,11 @@ int GradientRenderer::interpolate(float value, float value_min, float value_max,
   return (int)(result_min + (result_max - result_min) * (value - value_min) / (value_max - value_min));
 }
 
-void GradientRenderer::render_weight(unsigned char* output_buffer, float weight, Configuration *configuration) {
+void GradientRenderer::render_opacity(unsigned char* output_buffer, float weight, Configuration *configuration) {
   float value;
   int i;
 
-  if (!configuration->weight_method)
+  if (!configuration->opacity_method)
     return;
 
   if (!configuration->weights_size)

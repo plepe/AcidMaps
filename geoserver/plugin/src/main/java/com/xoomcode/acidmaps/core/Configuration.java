@@ -59,7 +59,7 @@ public class Configuration {
 
 	public float quantilOffset;
 
-	public int weightMethod;
+	public int opacityMethod;
 
 	public float[] weights;
 
