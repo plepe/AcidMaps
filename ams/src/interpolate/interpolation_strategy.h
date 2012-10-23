@@ -17,7 +17,7 @@ enum InterpolationStrategy {
   NEAREST_NEIGHBOR = 1,            /// N Neighbors found
   LINEAR = 2,                      /// Value decays with distance
   INVERSE_DISTANCE_WEIGHTING = 3,  /// Simple implementation of IDW
-  MEASURE_MAP = 4                  /// Map of Measurements - avg/median/percentile as value, opacity from weight of measurements
+  QUANTIL_MAP = 4                  /// Calculate quantil of surrounding data points
 };
 
 };  // namespace acid_maps

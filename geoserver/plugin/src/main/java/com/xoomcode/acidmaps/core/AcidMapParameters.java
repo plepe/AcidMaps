@@ -32,7 +32,7 @@ public class AcidMapParameters {
 
 	public static final String DISTANCE_METHOD = "DISTANCE_METHOD";
 
-	public static final String MEASURE_QUANTIL = "MEASURE_QUANTIL";
+	public static final String QUANTIL = "QUANTIL";
 
 	public static final String QUANTIL_METHOD = "QUANTIL_METHOD";
 

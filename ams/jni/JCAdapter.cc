@@ -159,7 +159,7 @@ void buildConfiguration(JNIEnv* env, jobject jconfiguration, ams::Configuration*
  	configuration->radius = getIntField(env, configurationClass, jconfiguration, "radius");
 	configuration->distanceMethod = getIntField(env, configurationClass, jconfiguration, "distanceMethod");
  	configuration->format = getIntField(env, configurationClass, jconfiguration, "format");
-	configuration->measure_quantil= getFloatField(env, configurationClass, jconfiguration, "measureQuantil");
+	configuration->quantil= getFloatField(env, configurationClass, jconfiguration, "quantil");
 	configuration->quantil_method= getIntField(env, configurationClass, jconfiguration, "quantilMethod");
 	configuration->quantil_offset= getFloatField(env, configurationClass, jconfiguration, "quantilOffset");
 

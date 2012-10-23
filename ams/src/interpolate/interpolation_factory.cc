@@ -12,7 +12,7 @@
 #include "./nearest_neighbor.h"
 #include "./linear_interpolation.h"
 #include "./inverse_distance_weighting.h"
-#include "./measure_map.h"
+#include "./quantil_map.h"
 
 namespace acid_maps {
 
@@ -27,8 +27,8 @@ Interpolation* InterpolationFactory::get(int strategy) {
     case INVERSE_DISTANCE_WEIGHTING:
       return new InverseDistanceWeighting();
       
-    case MEASURE_MAP:
-      return new MeasureMap();
+    case QUANTIL_MAP:
+      return new QuantilMap();
 
     default:
       return new DummyInterpolation();

@@ -1,13 +1,13 @@
 /**
- * @file measure_map.cc
- * @brief Map of Measurements - avg/median/percentile as value, opacity from weight of measurements
+ * @file quantil_map.cc
+ * @brief Calculate quantil of surrounding data points
  *
  * @date 2012-08-07 (created)
   
  * @authors Stephan Plepelits
  */
 
-#include "./measure_map.h"
+#include "./quantil_map.h"
 
 #include <cstring>
 #include <cmath>
@@ -52,8 +52,8 @@ float calculate_weight_from_distance(float distance_x, float distance_y, Configu
 
 }
 
-float get_quantil(Configuration *configuration, list<measure_map_data_element> dataset_ordered, float accummulated_weight, float* quantil_values, int quantil_values_count) {
-  list<measure_map_data_element>::iterator dataset_it, dataset_prev;
+float get_quantil(Configuration *configuration, list<quantil_map_data_element> dataset_ordered, float accummulated_weight, float* quantil_values, int quantil_values_count) {
+  list<quantil_map_data_element>::iterator dataset_it, dataset_prev;
   float accummulated_value=0;
   bool is_first=true;
   bool found=false;
@@ -128,25 +128,25 @@ int quantil_configure(Configuration *configuration, float* quantil_values) {
   switch (configuration->quantil_method) {
     case 1:
       quantil_values[0] =
-        configuration->measure_quantil - configuration->quantil_offset;
+        configuration->quantil - configuration->quantil_offset;
       quantil_values[1] =
-        configuration->measure_quantil + configuration->quantil_offset;
+        configuration->quantil + configuration->quantil_offset;
       quantil_values_count = 2;
       break;
     case 2:
       quantil_values[0] =
-        configuration->measure_quantil - configuration->quantil_offset;
+        configuration->quantil - configuration->quantil_offset;
       quantil_values[1] =
-        configuration->measure_quantil;
+        configuration->quantil;
       quantil_values[2] =
-        configuration->measure_quantil;
+        configuration->quantil;
       quantil_values[3] =
-        configuration->measure_quantil + configuration->quantil_offset;
+        configuration->quantil + configuration->quantil_offset;
       quantil_values_count = 4;
       break;
     case 0:
     default:
-      quantil_values[0] = configuration->measure_quantil;
+      quantil_values[0] = configuration->quantil;
       quantil_values_count = 1;
       break;
   }
@@ -161,7 +161,7 @@ int quantil_configure(Configuration *configuration, float* quantil_values) {
   return quantil_values_count;
 }
 
-bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_data_element second) {
+bool quantil_map_data_element_cmp(quantil_map_data_element first, quantil_map_data_element second) {
   if(first.element->value < second.element->value)
     return true;
 
@@ -171,7 +171,7 @@ bool measure_map_data_element_cmp(measure_map_data_element first, measure_map_da
 /**
  * @todo
  */
-void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
+void QuantilMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   Configuration* configuration, float interpolated_bitmap[], float weight_bitmap[]) {
   Pixel* pixel;
   float distance_x, distance_y, weight, accummulated_value, accummulated_weight, current_weight;
@@ -186,12 +186,12 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 
   // create an array dataset_ordered, which will hold pointers to elements of
   // the dataset and a distance which will be calculated for each tile-position
-  list<measure_map_data_element> dataset_ordered;
-  list<measure_map_data_element>::iterator dataset_it, dataset_prev;
+  list<quantil_map_data_element> dataset_ordered;
+  list<quantil_map_data_element>::iterator dataset_it, dataset_prev;
 
   // insert whole dataset into the list
   for (int i = 0; i < dataset_size; i++) {
-    measure_map_data_element element;
+    quantil_map_data_element element;
 
     pixel = dataset + i;
     element.element=pixel;
@@ -201,7 +201,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
   }
 
   // sort
-  dataset_ordered.sort(measure_map_data_element_cmp);
+  dataset_ordered.sort(quantil_map_data_element_cmp);
 
   // for every pixel on the tile
   for (int y = 0; y < tile_size->height; y+=raster) {
@@ -240,7 +240,7 @@ void MeasureMap::interpolate(Size* tile_size, Pixel* dataset, int dataset_size,
 	}
       }
 
-      // no measure points around position? -> use 0 as value
+      // no data points around position? -> use 0 as value
       if (accummulated_weight <= 0.0f) {
 	accummulated_value=0;
       }

@@ -268,7 +268,7 @@ public class AcidMapService {
 		if(rawKvp.containsKey(AcidMapParameters.DISTANCE_METHOD))
 			distanceMethod = new Integer(rawKvp.get(AcidMapParameters.DISTANCE_METHOD));
 
-		float measureQuantil = new Float(rawKvp.get(AcidMapParameters.MEASURE_QUANTIL));
+		float quantil = new Float(rawKvp.get(AcidMapParameters.QUANTIL));
 		float quantilOffset = 0.1f;
 		if(rawKvp.containsKey(AcidMapParameters.QUANTIL_OFFSET))
 			quantilOffset = new Float(rawKvp.get(AcidMapParameters.QUANTIL_OFFSET));
@@ -308,7 +308,7 @@ public class AcidMapService {
 		configuration.intervalsColors = intervalsColors;
 		configuration.rendererType = rendererType;
 		configuration.interpolationStrategy = interpolationStrategy;
-		configuration.measureQuantil= measureQuantil;
+		configuration.quantil= quantil;
 		configuration.quantilMethod = quantilMethod;
 		configuration.quantilOffset = quantilOffset;
 		configuration.weightMethod = weightMethod;

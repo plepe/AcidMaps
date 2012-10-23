@@ -66,8 +66,8 @@ struct Configuration {
   /// Image format
   int format;
 
-  /// Measure Map: which quantil should be used
-  float measure_quantil;
+  /// Quantil Map: which quantil should be used
+  float quantil;
   float quantil_offset;
   int quantil_method;
 
